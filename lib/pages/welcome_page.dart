@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:dota_heroes_app/pages/home_page.dart';
 import 'package:dota_heroes_app/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-
 import '../models/hero_model.dart';
-
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -25,25 +22,27 @@ class _WelcomePageState extends State<WelcomePage>
   void initState() {
     super.initState();
     animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000))
-      ..repeat();
+        vsync: this, duration: const Duration(milliseconds: 1000))
+      ..repeat(reverse: true);
 
     fetchAllHeroesAndMoveToHomePage();
   }
 
-  Future<void> fetchAllHeroesAndMoveToHomePage()async{
+  Future<void> fetchAllHeroesAndMoveToHomePage() async {
     const String uri = "https://abusing-scripts.vercel.app/api/heros";
     Response response = await http.get(Uri.parse(uri));
-    if(response.statusCode == 200 || response.statusCode == 201){
+    if (response.statusCode == 200 || response.statusCode == 201) {
       var convertedResponse = jsonDecode(response.body);
-      for(var r in convertedResponse)
-      {
+      for (var r in convertedResponse) {
         heroesList.add(HeroModel.fromJson(json: r));
       }
     }
     Future.delayed(const Duration(seconds: 3)).then((value) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return HomePage(heroesList: heroesList,);
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) {
+        return HomePage(
+          heroesList: heroesList,
+        );
       }));
     });
   }
@@ -90,8 +89,8 @@ class _WelcomePageState extends State<WelcomePage>
 
   Widget backgroundImage() {
     return SizedBox.expand(
-      child: Image.network(
-        "https://wallpapers.com/images/hd/dota-2-phone-rcl35t6l3spfvkbb.jpg",
+      child: Image.asset(
+        "assets/images/bgWallpaper.jpeg",
         fit: BoxFit.cover,
       ),
     );

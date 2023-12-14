@@ -5,8 +5,7 @@ import 'package:tabler_icons/tabler_icons.dart';
 import 'app_enums.dart';
 
 class AppFunctions {
-
-  static Color getAttributeColor({required EnumPrimaryAttribute attribute}){
+  static Color getAttributeColor({required EnumPrimaryAttribute attribute}) {
     if (attribute == EnumPrimaryAttribute.agility) {
       return Colors.green;
     } else if (attribute == EnumPrimaryAttribute.strength) {
@@ -15,6 +14,28 @@ class AppFunctions {
       return Colors.blue;
     } else {
       return Colors.purpleAccent;
+    }
+  }
+
+  static String getStringFromEnum({required EnumRoles role}) {
+    if (role == EnumRoles.carry) {
+      return "Carry";
+    } else if (role == EnumRoles.support) {
+      return "Support";
+    } else if (role == EnumRoles.disabler) {
+      return "Disabler";
+    } else if (role == EnumRoles.nuker) {
+      return "Nuker";
+    } else if (role == EnumRoles.escape) {
+      return "Escape";
+    } else if (role == EnumRoles.pusher) {
+      return "Pusher";
+    } else if (role == EnumRoles.initiator) {
+      return "Initiator";
+    } else if (role == EnumRoles.other) {
+      return "Other";
+    } else {
+      return "";
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:dota_heroes_app/pages/detail_page.dart';
 import 'package:dota_heroes_app/utils/app_constants.dart';
 import 'package:dota_heroes_app/utils/app_functions.dart';
 import 'package:flutter/material.dart';
@@ -72,61 +73,78 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget heroWidget({required HeroModel hero}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) {
+            return DetailPage(hero: hero);
+          }),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(
+                color: AppFunctions.getAttributeColor(
+                        attribute: hero.primaryAttribute!)
+                    .withOpacity(0.05),
+                offset: const Offset(5, 5),
+                spreadRadius: 0,
+                blurRadius: 2)
+          ],
+          border: Border.all(
               color: AppFunctions.getAttributeColor(
-                      attribute: hero.primaryAttribute!)
-                  .withOpacity(0.2),
-              offset: const Offset(5, 5),
-              spreadRadius: 0,
-              blurRadius: 2)
-        ],
-        border: Border.all(
-            color: AppFunctions.getAttributeColor(
-                attribute: hero.primaryAttribute!),
-            width: 2),
-        color: AppFunctions.getAttributeColor(attribute: hero.primaryAttribute!)
-            .withOpacity(0.1),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 60,
-            width: 60,
-            clipBehavior: Clip.antiAlias,
-            decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: Image.network(
-              hero.image ?? "",
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                hero.name ?? "",
-                style: AppConstants.titleTextStyleBlack,
+                  attribute: hero.primaryAttribute!),
+              width: 2),
+          color:
+              AppFunctions.getAttributeColor(attribute: hero.primaryAttribute!)
+                  .withOpacity(0.05),
+        ),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                onTapHeroImage(hero.image!);
+              },
+              child: Hero(
+                tag: hero.id!,
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                  child: Image.network(
+                    hero.image ?? "",
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              Row(
-                children: AppFunctions.generateIcons(roles: hero.roles!),
-              )
-            ],
-          ),
-          const Spacer(),
-          AppFunctions.getAttributeImage(attribute: hero.primaryAttribute!)
-        ],
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hero.name ?? "",
+                  style: AppConstants.titleTextStyleBlack,
+                ),
+                Row(
+                  children: AppFunctions.generateIcons(roles: hero.roles!),
+                )
+              ],
+            ),
+            const Spacer(),
+            AppFunctions.getAttributeImage(attribute: hero.primaryAttribute!)
+          ],
+        ),
       ),
     );
   }
-
 
   Widget floatingButton() {
     return AnimatedOpacity(
@@ -134,13 +152,13 @@ class _HomePageState extends State<HomePage> {
       duration: const Duration(milliseconds: 500),
       child: Container(
         decoration:
-        const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+            const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
         padding: const EdgeInsets.all(10),
         child: IconButton(
           onPressed: () {
             scrollController.animateTo(0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.linearToEaseOut);
+                duration: const Duration(milliseconds: 1500),
+                curve: Curves.easeInBack);
           },
           icon: const Icon(
             TablerIcons.upload,
@@ -149,6 +167,23 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void onTapHeroImage(String img) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            content: AspectRatio(
+              aspectRatio: 2,
+              child: Image.network(
+                img,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        });
   }
 
   Widget customAppBar() {
